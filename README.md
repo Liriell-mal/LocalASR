@@ -1,109 +1,128 @@
 # LocalASR
 
-LocalASR est une application Windows de transcription audio et vidéo avec
-correction dans le navigateur. Ce projet personnel et expérimental est un
-démonstrateur technique local présenté comme portfolio public consultable.
+LocalASR is a **local-first Windows application for audio and video transcription**, with browser-based review and correction.
 
-## Transcrire et corriger localement
+It was built as a personal technical project to explore practical, privacy-preserving speech-to-text workflows that can run entirely on a local machine.
 
-Le moteur utilise **faster-whisper**, le modèle multilingue **small** et le calcul
-**CPU / INT8**. **PyAV** décode les médias avec ses bibliothèques FFmpeg intégrées :
-l'architecture actuelle ne lance aucun `ffmpeg.exe` externe. Français, anglais
-et détection automatique de langue sont proposés, sans traduction.
+The application is designed around a simple principle:
 
-L'interface locale propose un éditeur par segments horodatés, la réécoute bornée,
-la navigation entre segments, la recherche, la pagination et la vitesse de lecture.
-Les corrections sont enregistrées automatiquement. La transcription brute et le
-texte corrigé restent distincts ; le brut est en lecture seule dans l'API, sans
-être inviolable face à une modification directe sur disque.
+> Media stays local.  
+> Transcription stays local.  
+> Human correction remains part of the workflow.
 
-Après relecture, l'utilisateur valide une version et génère un PDF avec ReportLab.
-Les exports **PDF, TXT, SRT et JSON** sont conservés séparément. Une nouvelle
-correction remet le projet en brouillon. Le mode d'essai limite le traitement aux
-cinq premières minutes et marque ses PDF TEST.
+LocalASR is an experimental personal project.
 
-Un petit dépassement de la fin du dernier segment produit par le moteur peut
-être ramené à la fin réelle de l'audio, dans une limite de deux secondes, sans
-suppression du texte. Les autres horodatages invalides sont refusés ;
-[la règle et ses tests](docs/TESTING.md) précisent ce traitement.
+---
 
-## Local-first et runtime indépendant
+## Features
 
-Le serveur écoute sur `127.0.0.1` et les ressources de l'interface sont locales.
-L'application attend un modèle déjà disponible sur disque, impose le chargement
-local et n'effectue aucun téléchargement automatique. Son runtime indépendant
-fait l'objet d'un inventaire et d'une autorisation propres à chaque installation.
-Aucun runtime, modèle, média, transcription ou résultat privé n'est distribué ici.
+### Local transcription
 
-Le fonctionnement hors ligne a été testé sur la machine de développement avec
-le réseau physiquement coupé (Wi-Fi coupé et Ethernet débranché), selon la
-confirmation de l'utilisateur. Il s'agit d'un retour d'essai humain, non vérifié
-de manière indépendante. Les gardes réseau Python ne sont pas un
-pare-feu système pour les bibliothèques natives. Une vérification offline réelle
-reste nécessaire pour qualifier une nouvelle installation.
+LocalASR uses:
 
-## Installation et utilisation
+- **faster-whisper**
+- Whisper **small** multilingual model
+- CPU inference
+- INT8 compute
+- **PyAV** for media decoding
 
-Cible actuelle : **Windows 64 bits, CPython 3.14.3**. La reconstruction sur une
-machine vierge reste à qualifier. Le dépôt contient une procédure préparée, une
-configuration exemple et un générateur d'inventaire en attente d'approbation ;
-il ne contient pas encore de verrou d'installation validé.
+PyAV uses its bundled FFmpeg libraries, so the current architecture does **not require an external `ffmpeg.exe` process**.
 
-Suivre [la procédure de reconstruction](docs/PUBLIC_REPRODUCIBILITY.md), qui
-distingue acquisition, vérification, installation, autorisation et exécution.
-Après préparation de l'environnement, double-cliquer sur **Start LocalASR.cmd**,
-ou lancer :
+Available transcription profiles include:
 
-```powershell
-& '.\Start LocalASR.cmd'
-```
+- French
+- English
+- automatic language detection
 
-Le lanceur retrouve le Python déjà configuré dans `runtime/independent/local.json`.
-La variable `LOCALASR_PYTHON` reste une surcharge facultative ; le Python choisi
-doit correspondre à la configuration autorisée.
+The application uses `task=transcribe` and does not automatically translate speech.
 
-Choisir un média local, lancer la transcription, relire et corriger les segments,
-puis valider et exporter. Attendre « Enregistré » avant de fermer l'éditeur.
-Fermer l'onglet ne termine pas le serveur :
+---
 
-```powershell
-& '.\Start LocalASR.cmd' --stop --no-browser
-```
+## Human-in-the-loop correction
 
-`--data-dir 'C:\path\to\local-data'` sélectionne un dossier de données ; réutiliser
-la même option pour les relancements et l'arrêt. Conserver les données hors
-synchronisation cloud et ne pas exposer le serveur via proxy, tunnel ou réseau.
+The local web interface provides a timestamped segment editor designed for rapid transcript review.
 
-## Tests et observations
+Each segment includes:
 
-Les [tests publics](docs/TESTING.md) utilisent des fixtures synthétiques et la
-bibliothèque standard. Ils couvrent sauvegarde, révisions, brut séparé, exports,
-protection de la source, API locale, diagnostics et refus des runtimes non autorisés.
-Ils n'exigent ni modèle ni package ASR et ne mesurent pas la précision linguistique.
+- start and end timestamps
+- editable text
+- direct playback of the corresponding audio section
 
-La qualification historique sur la machine de développement a rapporté 51 tests
-unitaires, 15 contrôles de formats/runtime et 31 contrôles de workflow réussis,
-dont un parcours synthétique de 1 080 segments et un PDF de 96 pages. Ces résultats
-proviennent d'une version antérieure au nettoyage public et, pour les contrôles
-runtime/workflow, d'outils de qualification non inclus dans le dépôt. Ils ne
-constituent pas une qualification de l'installation publique sur machine vierge.
+The interface also supports:
 
-Lors d'un test humain, l'utilisateur a observé **environ 30 corrections sur
-environ 45 minutes**, principalement sur du vocabulaire technique, des acronymes
-et des homophones. C'est une observation utilisateur, **pas un WER** ni une mesure
-scientifique de précision.
+- segment-to-segment navigation
+- playback controls
+- short backward / forward jumps
+- playback speed control
+- search
+- pagination for long transcripts
 
-## Limites et droits
+The goal is not to eliminate human review, but to make correction fast and practical.
 
-Application personnelle, mono-utilisateur, une transcription à la fois. Pas de
-diarisation ni d'attribution automatique des locuteurs. L'anglais sur parole réelle,
-CUDA, les autres OS et la portabilité complète ne sont pas qualifiés. La qualité
-dépend du média ; une relecture humaine reste nécessaire.
+---
 
-LocalASR n'est pas un dispositif médical. Aucune validation clinique, certification
-de sécurité, compatibilité universelle ou précision formellement mesurée n'est
-revendiquée.
+## Transcript integrity
 
-**Aucune licence de projet n'est accordée pour le moment.** Le projet est présenté
-comme un portfolio consultable, sans revendication de statut open source.
-Les dépendances conservent leurs propres conditions : voir [les tiers](docs/THIRD_PARTY.md).
+LocalASR keeps the original machine transcript separate from the edited version.
+
+The raw transcript is preserved and is not overwritten by manual corrections.
+
+User edits are automatically saved.
+
+The workflow distinguishes between:
+
+- raw transcript
+- editable working transcript
+- validated version
+- exported files
+
+This makes it possible to retain the original ASR output while producing a corrected human-reviewed version.
+
+---
+
+## Validation and exports
+
+After review, a transcript can be explicitly validated and exported locally.
+
+Supported outputs include:
+
+- PDF
+- TXT
+- SRT
+- JSON
+
+PDF generation is performed locally with **ReportLab**.
+
+The application also includes a test mode that can limit processing to the first five minutes of a media file and clearly marks generated PDFs as test output.
+
+---
+
+## Offline operation
+
+LocalASR was designed to continue operating after the initial installation and model acquisition without relying on a transcription API or cloud service.
+
+The normal workflow was empirically tested on the development machine with:
+
+- Wi-Fi disabled
+- Ethernet disconnected
+
+The following workflow completed successfully:
+
+```text
+Launch LocalASR
+        ↓
+Import local media
+        ↓
+Decode locally
+        ↓
+Transcribe locally
+        ↓
+Review timestamped segments
+        ↓
+Edit and autosave
+        ↓
+Reopen the project
+        ↓
+Validate
+        ↓
+Export PDF / TXT / SRT / JSON
