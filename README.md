@@ -12,117 +12,55 @@ The application is designed around a simple principle:
 
 LocalASR is an experimental personal project.
 
+## LocalASR interface
+
+![Interface principale de LocalASR](docs/LocalASR1.png)
+
+## Validation and Exports
+
+After reviewing and correcting the transcription, users can validate the final version and export it in PDF, TXT, SRT, or JSON format.
+
+![Validation et exports](docs/localASR2.png)
+
 ---
 
-## Features
+## Key features
 
-### Local transcription
-
-LocalASR uses:
-
-- **faster-whisper**
+- Local transcription with **faster-whisper**
 - Whisper **small** multilingual model
-- CPU inference
-- INT8 compute
-- **PyAV** for media decoding
+- CPU / INT8 inference
+- **PyAV** media decoding
+- Timestamped browser-based editor
+- Direct playback of each transcript segment
+- Autosave and project reopening
+- Raw transcript preserved separately from edits
+- Explicit validation step
+- Local exports to **PDF, TXT, SRT and JSON**
+- Offline workflow after initial installation and model acquisition
 
-PyAV uses its bundled FFmpeg libraries, so the current architecture does **not require an external `ffmpeg.exe` process**.
+Supported input extensions currently include:
 
-Available transcription profiles include:
-
-- French
-- English
-- automatic language detection
-
-The application uses `task=transcribe` and does not automatically translate speech.
-
----
-
-## Human-in-the-loop correction
-
-The local web interface provides a timestamped segment editor designed for rapid transcript review.
-
-Each segment includes:
-
-- start and end timestamps
-- editable text
-- direct playback of the corresponding audio section
-
-The interface also supports:
-
-- segment-to-segment navigation
-- playback controls
-- short backward / forward jumps
-- playback speed control
-- search
-- pagination for long transcripts
-
-The goal is not to eliminate human review, but to make correction fast and practical.
+`.wav` · `.mp3` · `.m4a` · `.mp4` · `.mov` · `.mkv`
 
 ---
 
-## Transcript integrity
-
-LocalASR keeps the original machine transcript separate from the edited version.
-
-The raw transcript is preserved and is not overwritten by manual corrections.
-
-User edits are automatically saved.
-
-The workflow distinguishes between:
-
-- raw transcript
-- editable working transcript
-- validated version
-- exported files
-
-This makes it possible to retain the original ASR output while producing a corrected human-reviewed version.
-
----
-
-## Validation and exports
-
-After review, a transcript can be explicitly validated and exported locally.
-
-Supported outputs include:
-
-- PDF
-- TXT
-- SRT
-- JSON
-
-PDF generation is performed locally with **ReportLab**.
-
-The application also includes a test mode that can limit processing to the first five minutes of a media file and clearly marks generated PDFs as test output.
-
----
-
-## Offline operation
-
-LocalASR was designed to continue operating after the initial installation and model acquisition without relying on a transcription API or cloud service.
-
-The normal workflow was empirically tested on the development machine with:
-
-- Wi-Fi disabled
-- Ethernet disconnected
-
-The following workflow completed successfully:
+## Architecture
 
 ```text
-Launch LocalASR
-        ↓
-Import local media
-        ↓
-Decode locally
-        ↓
-Transcribe locally
-        ↓
-Review timestamped segments
-        ↓
-Edit and autosave
-        ↓
-Reopen the project
-        ↓
-Validate
-        ↓
-Export PDF / TXT / SRT / JSON
+AUDIO / VIDEO
+      ↓
+PyAV
+      ↓
+faster-whisper
+      ↓
+Raw transcript preserved
+      ↓
+Timestamped browser editor
+      ↓
+Human correction + autosave
+      ↓
+Validated transcript
+      ↓
+PDF / TXT / SRT / JSON
+
+---
