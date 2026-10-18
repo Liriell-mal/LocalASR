@@ -1,0 +1,8 @@
+# Direct LocalASR imports only; candidate for Windows x64 / CPython 3.14.3.
+# Not an installation authorization or a complete transitive lock.
+# Resolve dependencies normally, then lock every approved wheel with its hash.
+# See docs/PUBLIC_REPRODUCIBILITY.md for transitive dependencies and hf-xet.
+faster-whisper==1.2.1
+av==18.1.0
+numpy==2.5.2
+reportlab==5.0.1

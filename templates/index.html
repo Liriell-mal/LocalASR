@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr" spellcheck="false" translate="no">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LocalASR — transcription locale</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<body>
+<header><div class="brand"><span class="mark" aria-hidden="true">L</span><div><strong>LocalASR</strong><span>Votre voix, vos mots, sur votre ordinateur.</span></div></div><span class="local">● Traitement local</span></header>
+<main>
+<aside>
+<section class="card"><h1>Une nouvelle transcription</h1><p class="muted">Audio ou vidéo · WAV, MP3, M4A, MP4, MOV, MKV</p>
+<label id="drop" class="drop" for="file"><span class="plus" aria-hidden="true">＋</span><strong>Choisir un fichier</strong><span>ou le déposer ici</span><input id="file" type="file" accept=".wav,.mp3,.m4a,.mp4,.mov,.mkv"></label>
+<p id="selected" class="muted">Aucun fichier sélectionné</p>
+<details><summary>Utiliser le dossier INBOX</summary><p id="inboxPath" class="path"></p><label for="inbox">Fichiers disponibles</label><select id="inbox"><option value="">Choisir…</option></select><button id="refreshInbox" class="quiet">Actualiser</button></details>
+<details><summary>Utiliser un fichier sans le déplacer</summary><label for="reference">Chemin complet du fichier local</label><input id="reference" type="text" placeholder="C:\…\video.mp4"><p class="muted">L’original est conservé. Les résultats restent dans LocalASR.</p></details>
+<label for="profile">Profil de transcription</label><select id="profile" aria-describedby="languageHelp"><option value="francais">Français</option><option value="anglais">Anglais</option><option value="auto">Détection automatique</option></select>
+<p id="languageHelp" class="muted small">Choisissez la langue de l’échange. Le texte reste dans la langue parlée.</p>
+<label class="checkbox"><input id="testMode" type="checkbox"> Test sur les 5 premières minutes</label><p class="muted small">Le mode test produit des PDF marqués TEST et ne valide pas le texte.</p>
+<button id="transcribe" class="primary wide" disabled>Transcrire</button><p id="availability" class="notice" role="status">Connexion à l’application…</p>
+</section>
+<section class="card"><div class="section-title"><h2>Mes transcriptions</h2><button id="refreshProjects" class="quiet" aria-label="Actualiser les projets">↻</button></div><div id="projects"><p class="muted">Aucune transcription pour le moment.</p></div></section>
+</aside>
+<section id="workspace" class="card workspace" aria-label="Éditeur de transcription">
+<div id="empty" class="empty"><span aria-hidden="true">≋</span><h2>De l’audio au texte, simplement.</h2><p>Choisissez un fichier puis cliquez sur Transcrire.<br>Vos segments horodatés apparaîtront ici pour être corrigés.</p><p class="muted">Le texte brut est conservé séparément de vos corrections.</p></div>
+<div id="editor" hidden>
+<div class="section-title"><div><p class="eyebrow">TRANSCRIPTION</p><h2 id="sourceName"></h2></div><span id="status" class="badge">DRAFT</span></div>
+<p id="progress" role="status"></p>
+<div id="editing" hidden>
+<div class="metadata"><div><label for="title">Titre du document</label><input id="title" maxlength="500"></div><div><label for="participants">Participants (facultatif)</label><input id="participants" maxlength="4000"></div></div>
+<div class="audio-tools">
+<audio id="player" controls preload="metadata" aria-label="Lecture de l’audio local"></audio>
+<div class="transport" aria-label="Commandes de correction audio">
+<button id="previousSegment" title="Alt + flèche haut">← Segment précédent</button><button id="playSegment" class="primary" title="Ctrl + Entrée">Écouter le segment</button><button id="nextSegment" title="Alt + flèche bas">Segment suivant →</button>
+<button id="rewind" aria-label="Reculer de trois secondes">−3 s</button><button id="playPause" title="F8">Lire / Pause</button><button id="forward" aria-label="Avancer de trois secondes">+3 s</button>
+<label for="speed">Vitesse</label><select id="speed"><option value="0.75">0,75×</option><option value="1" selected>1×</option><option value="1.25">1,25×</option><option value="1.5">1,5×</option><option value="2">2×</option></select>
+</div><p id="selectionInfo" class="muted" role="status">Sélectionnez un segment.</p>
+</div>
+<div class="toolbar"><input id="search" type="search" placeholder="Rechercher dans la transcription" aria-label="Rechercher dans la transcription"><button id="save">Sauvegarder</button><span id="saveState" role="status">Enregistré</span></div>
+<div class="pagination"><button id="previousPage">Page précédente</button><span id="segmentCount" role="status"></span><button id="nextPage">Page suivante</button></div>
+<div id="segments"></div>
+<div class="editor-bottom"><p class="muted">Ctrl + Entrée : écouter · Alt + ↑ / ↓ : changer de segment · Ctrl + S : sauvegarder · F8 : pause / reprise.<br>Attendez « Enregistré » avant de fermer.</p><button id="showRaw">Consulter le brut</button><button id="reset" class="quiet">Revenir au texte brut</button></div>
+<div class="exports"><div><h3>Exporter une version</h3><p class="muted">La validation crée une nouvelle version et conserve les précédentes.</p></div><button id="validate" class="primary">VALIDER ET CRÉER LE PDF</button></div>
+<div class="secondary-exports"><button data-export="txt">TXT</button><button data-export="srt">SRT</button><button data-export="json">JSON</button><a id="lastPdf" hidden>Télécharger le PDF</a></div>
+</div></div>
+</section>
+</main>
+<dialog id="rawDialog" aria-labelledby="rawHeading"><div class="section-title"><h2 id="rawHeading">Transcription brute · lecture seule</h2><button id="closeRaw">Fermer</button></div><p class="muted">Les corrections et les versions validées sont conservées séparément.</p><pre id="rawText"></pre></dialog>
+<div id="error" class="error" role="alert" hidden></div><footer>LocalASR · Aucun compte requis · Aucun service de transcription distant</footer>
+</body></html>

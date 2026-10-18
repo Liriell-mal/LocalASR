@@ -1,0 +1,14 @@
+{
+  "python": "C:/path/to/python.exe",
+  "site_packages": "C:/path/to/environment/Lib/site-packages",
+  "model_path": "C:/path/to/models/faster-whisper-small",
+  "model": "Systran/faster-whisper-small",
+  "revision": "REPLACE_WITH_VERIFIED_MODEL_REVISION",
+  "device": "cpu",
+  "compute_type": "int8",
+  "profiles": {
+    "auto": {"label": "Détection automatique", "language": null, "task": "transcribe", "beam_size": 5, "temperature": [0, 0.2, 0.4, 0.6, 0.8, 1], "condition_on_previous_text": false, "vad_filter": false, "word_timestamps": false},
+    "francais": {"label": "Français", "language": "fr", "task": "transcribe", "beam_size": 5, "temperature": [0, 0.2, 0.4, 0.6, 0.8, 1], "condition_on_previous_text": false, "vad_filter": false, "word_timestamps": false},
+    "anglais": {"label": "Anglais", "language": "en", "task": "transcribe", "beam_size": 5, "temperature": [0, 0.2, 0.4, 0.6, 0.8, 1], "condition_on_previous_text": false, "vad_filter": false, "word_timestamps": false}
+  }
+}
