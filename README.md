@@ -27,8 +27,6 @@ After reviewing and correcting the transcription, users can validate the final v
 ## Key features
 
 - Local transcription with **faster-whisper**
-- Whisper **small** multilingual model
-- CPU / INT8 inference
 - **PyAV** media decoding
 - Timestamped browser-based editor
 - Direct playback of each transcript segment
