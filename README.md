@@ -1,6 +1,6 @@
 # LocalASR
 
-LocalASR is a **local-first Windows application for audio and video transcription**, with browser-based review and correction.
+LocalASR (Automatic speech recognition) is a **local-first Windows application for audio and video transcription**, with browser-based review and correction.
 
 It was built as a personal technical project to explore practical, privacy-preserving speech-to-text workflows that can run entirely on a local machine.
 
