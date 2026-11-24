@@ -202,3 +202,10 @@ LocalASR is published primarily as a technical portfolio project demonstrating:
 - testing and verification
 - runtime isolation
 - handling of real-world edge cases
+
+---
+
+## License
+
+LocalASR is released under the [MIT License](LICENSE).
+Third-party components remain subject to their respective licenses.
