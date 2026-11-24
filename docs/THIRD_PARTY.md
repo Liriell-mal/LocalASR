@@ -34,3 +34,5 @@ police Arial doivent être examinés séparément lors de l'acquisition. La lice
 déclarée par PyAV ne suffit pas à qualifier toutes ses bibliothèques embarquées.
 Ne pas recopier la police Windows dans le dépôt. Une future redistribution de
 code ou de binaires tiers imposerait une nouvelle revue des notices et obligations.
+
+Le code propre à LocalASR est distribué sous licence MIT. Les composants tiers restent soumis à leurs licences respectives.
